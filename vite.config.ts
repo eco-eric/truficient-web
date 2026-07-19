@@ -1,0 +1,69 @@
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react-swc";
+import path from "path";
+import { componentTagger } from "lovable-tagger";
+import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
+
+// NOTE: The SEO prerender + sitemap generation run as an explicit post-build
+// step (`scripts/prerender.mjs`, invoked by the npm `build` script), NOT as a
+// vite `closeBundle` plugin. The previous Lovable setup ran it as a plugin too,
+// which double-executed it under `npm run build` (plugin + npm step). On Vercel
+// the build command is `bun run build` (= `vite build && node scripts/prerender.mjs`),
+// so a single explicit invocation is correct and avoids the double-run.
+
+// https://vitejs.dev/config/
+export default defineConfig(({ mode }) => ({
+  server: {
+    host: "::",
+    port: 8080,
+  },
+  plugins: [
+    react(),
+    mode === "development" && componentTagger(),
+    ViteImageOptimizer({
+      jpg: { quality: 70 },
+      jpeg: { quality: 70 },
+      png: { quality: 75 },
+    }),
+  ].filter(Boolean),
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+    dedupe: ["react", "react-dom"],
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Core React runtime
+          "vendor-react": ["react", "react-dom", "react-router-dom"],
+          // Data layer
+          "vendor-query": ["@tanstack/react-query"],
+          // Supabase client
+          "vendor-supabase": ["@supabase/supabase-js"],
+          // UI framework
+          "vendor-radix": [
+            "@radix-ui/react-dialog",
+            "@radix-ui/react-dropdown-menu",
+            "@radix-ui/react-popover",
+            "@radix-ui/react-tabs",
+            "@radix-ui/react-toast",
+            "@radix-ui/react-tooltip",
+            "@radix-ui/react-select",
+            "@radix-ui/react-accordion",
+            "@radix-ui/react-checkbox",
+            "@radix-ui/react-label",
+            "@radix-ui/react-toggle",
+            "@radix-ui/react-toggle-group",
+            "@radix-ui/react-slot",
+          ],
+          // Animation
+          "vendor-motion": ["framer-motion"],
+          // Charts
+          "vendor-recharts": ["recharts"],
+        },
+      },
+    },
+  },
+}));
