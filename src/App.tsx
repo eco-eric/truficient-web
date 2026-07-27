@@ -10,6 +10,7 @@ import { ScrollToTop } from "./components/ScrollToTop";
 import { TrackingScripts } from "./components/tracking/TrackingScripts";
 import CookieConsent from "./components/CookieConsent";
 import { loadGA4, trackPageView } from "./lib/analytics";
+import { captureAttribution } from "./utils/attribution";
 import { Loader2 } from "lucide-react";
 
 // Critical path — loaded eagerly (homepage)
@@ -83,7 +84,7 @@ const PageLoader = () => (
 // Root layout component that includes global elements
 const RootLayout = () => {
   const location = useLocation();
-  useEffect(() => { loadGA4(); }, []);
+  useEffect(() => { captureAttribution(); loadGA4(); }, []);
   useEffect(() => { trackPageView(location.pathname + location.search); }, [location.pathname, location.search]);
   return (
     <>

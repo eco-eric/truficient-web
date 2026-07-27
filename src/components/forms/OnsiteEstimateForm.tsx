@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, CheckCircle, Calendar, Home, ClipboardList, MapPin } from 'lucide-react';
 import { trackConversion } from '@/utils/conversionTracking';
+import { getAttribution } from '@/utils/attribution';
 import { useFormSourceTags } from '@/hooks/useFormSourceTags';
 import { AddressAutocomplete, AddressComponents } from '@/components/AddressAutocomplete';
 import { isInServiceArea, getServiceAreaDisplay } from '@/lib/serviceArea';
@@ -104,6 +105,7 @@ export const OnsiteEstimateForm = () => {
           service_type: 'Onsite Estimate',
           message: `Address: ${fullAddress}\nCounty: ${formData.county}\n\n${formData.message}`,
           status: 'new',
+          ...getAttribution(),
         });
 
       if (submitError) throw submitError;
