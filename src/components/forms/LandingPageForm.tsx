@@ -15,6 +15,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, CheckCircle } from 'lucide-react';
 import { trackConversion } from '@/utils/conversionTracking';
+import { getAttribution } from '@/utils/attribution';
 
 interface FieldsConfig {
   firstName: boolean;
@@ -116,6 +117,7 @@ export const LandingPageForm = ({ slug, className, onSuccess }: LandingPageFormP
           message: formData.message || null,
           ghl_sync_status: 'pending',
           status: 'new',
+          ...getAttribution(),
         })
         .select()
         .single();

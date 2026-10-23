@@ -15,6 +15,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, CheckCircle } from 'lucide-react';
 import { trackConversion } from '@/utils/conversionTracking';
+import { getAttribution } from '@/utils/attribution';
 import { useFormSourceTags } from '@/hooks/useFormSourceTags';
 
 // Phone formatting utility
@@ -114,6 +115,7 @@ export const ContactForm = ({
     setIsSubmitting(true);
     try {
       // Save to contact_submissions (triggers admin notification + auto-task)
+      const attribution = getAttribution();
       const { error: submitError } = await supabase
         .from('contact_submissions')
         .insert({
@@ -124,6 +126,7 @@ export const ContactForm = ({
           service_type: parsed.data.serviceType,
           message: parsed.data.message,
           status: 'new',
+          ...attribution,
         });
       if (submitError) throw submitError;
 

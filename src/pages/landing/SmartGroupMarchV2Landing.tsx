@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useButtonTracking } from "@/hooks/useButtonTracking";
 import { usePageSEO } from "@/hooks/usePageSEO";
+import { getAttribution } from "@/utils/attribution";
 import GalleryOverlay from "@/components/landing/GalleryOverlay";
 import ownerPhoto from "@/assets/owner-eric.webp";
 import galleryAttic from "@/assets/gallery/attic-install.webp";
@@ -119,6 +120,7 @@ export default function SmartGroupMarchV2Landing() {
         service_type: "Smart Group - Goodman SD Variable Speed 16-17 SEER2",
         message: `Timeline: ${timeline}. Referred by: ${referral || "N/A"}`,
         custom_fields: { zip, timeline, referral, campaign: "march-group-buy-2026-v2", source: "smart_group_march_v2" },
+        ...getAttribution(),
       });
 
       if (insertError) throw insertError;

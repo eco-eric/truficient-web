@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useButtonTracking } from "@/hooks/useButtonTracking";
+import { getAttribution } from "@/utils/attribution";
 import GalleryOverlay from "@/components/landing/GalleryOverlay";
 import ownerPhoto from "@/assets/owner-eric.webp";
 import galleryAttic from "@/assets/gallery/attic-install.webp";
@@ -104,6 +105,7 @@ export default function SmartGroupMarchLanding() {
         service_type: "Group Buy - Goodman SD Variable Speed",
         message: `Timeline: ${timeline}. Referred by: ${referral || "N/A"}`,
         custom_fields: { zip, timeline, referral, campaign: "march-group-buy-2026", source: "march_group_buy_landing" },
+        ...getAttribution(),
       });
 
       if (insertError) throw insertError;

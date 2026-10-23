@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, CheckCircle, Phone } from "lucide-react";
 import { trackConversion } from "@/utils/conversionTracking";
+import { getAttribution } from "@/utils/attribution";
 
 const formatPhoneNumber = (value: string): string => {
   const digits = value.replace(/\D/g, "");
@@ -91,6 +92,7 @@ export const EstimateRequestForm = ({
         service_type: systemType,
         message,
         status: "new",
+        ...getAttribution(),
       });
       if (insertError) throw insertError;
 
